@@ -7,6 +7,11 @@ authors = ["IFSGuid Backend"]
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.4.2"
+fastapi = "^0.104.1"
+uvicorn = "^0.24.0.post1"
+alembic = "^1.12.1"
+sqlalchemy = "1.4.27"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
