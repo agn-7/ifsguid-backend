@@ -13,6 +13,7 @@ alembic = "^1.12.1"
 sqlalchemy = "1.4.27"
 psycopg2-binary = "^2.9.9"
 pydantic-settings = "^2.0.3"
+pytz = "^2023.3.post1"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
