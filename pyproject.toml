@@ -2,7 +2,7 @@
 name = "ifsguid"
 version = "0.1.0"
 description = ""
-authors = ["IFSGuid Backend"]
+authors = ["Benyamin <benyaminjmf@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -12,10 +12,12 @@ uvicorn = "^0.24.0.post1"
 alembic = "^1.12.1"
 sqlalchemy = "1.4.27"
 psycopg2-binary = "^2.9.9"
+pydantic-settings = "^2.0.3"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
 pytest = "7.4.2"
+black = "^23.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
