@@ -1,0 +1,23 @@
+# Ignore compiled python files
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+
+# Ignore environment related files
+# .env
+.venv
+*.log
+env/
+
+# Ignore all git files
+.git/
+.gitignore
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+db.sqlite3
+
+poetry.lock

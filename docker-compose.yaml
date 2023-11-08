@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  ifsguid_nginx:
+    build: ./nginx
+    image: nginx:alpine
+    restart: unless-stopped
+    container_name: ifsguid_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro"
+      - "./nginx/static:/static:ro"
+    depends_on:
+      - ifsguid_app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+  ifsguid_db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    container_name: ifsguid_db
+    volumes:
+      - ifsguid-postgres-data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    env_file:
+      - .env
+
+  ifsguid_app:
+    build: .
+    image: ifsguid:1.0.0
+    container_name: ifsguid_app
+    restart: unless-stopped
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./nginx:/opt/nginx:rw"
+    env_file:
+      - ./.docker.env
+    expose:
+      - "8000"
+    depends_on:
+      - ifsguid_db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+volumes:
+  ifsguid-postgres-data:
+    driver: local
