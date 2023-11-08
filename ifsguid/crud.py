@@ -61,3 +61,33 @@ def update_interaction(
     return None
 
 
+def get_messages(
+    db: Session, interaction_id: UUID = None, page: int = None, per_page: int = 10
+) -> List[models.Message]:
+    query = db.query(models.Message)
+
+    if interaction_id is not None:
+        query = query.filter(models.Message.interaction_id == interaction_id)
+
+    if page is not None:
+        query = query.offset((page - 1) * per_page).limit(per_page)
+
+    return query.all()
+
+
+def create_message(
+        db: Session, messages: List[schemas.MessageCreate], interaction_id: UUID
+    ) -> List[models.Message]:
+
+    messages_db = []
+    for msg in messages:
+        message = models.Message(
+            **msg.model_dump(),
+            interaction_id=interaction_id,
+            created_at=utils.convert_timezone(datetime.now()),
+        )
+        db.add(message)
+        messages_db.append(message)
+
+    db.commit()
+    return messages_db
