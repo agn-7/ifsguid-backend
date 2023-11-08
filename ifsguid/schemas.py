@@ -5,7 +5,7 @@ from typing import List
 
 
 class MessageCreate(BaseModel):
-    role: str
+    role: str = "human"
     content: str
 
     class Config:
