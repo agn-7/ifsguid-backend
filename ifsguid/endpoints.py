@@ -73,3 +73,51 @@ async def update_interaction(
     )
 
 
+@router.get(
+    "/interactions/{interaction_id}/messages", response_model=List[schemas.Message]
+)
+async def get_all_message_in_interaction(
+    interaction_id: UUID,
+    page: Optional[int] = None,
+    per_page: Optional[int] = None,
+    db: Session = Depends(get_db),
+) -> List[schemas.Message]:
+    return [
+        schemas.Message.model_validate(message)
+        for message in crud.get_messages(
+            db=db, interaction_id=interaction_id, page=page, per_page=per_page
+        )
+    ]
+
+
+@router.post(
+    "/interactions/{interactions_id}/messages", response_model=List[schemas.Message]
+)
+async def create_message(
+    interaction_id: UUID, message: schemas.MessageCreate, db: Session = Depends(get_db)
+) -> schemas.Message:
+    interaction = schemas.Interaction.model_validate(
+        crud.get_interaction(db=db, id=interaction_id)
+    )
+
+    if not interaction:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Interaction not found"
+        )
+
+    messages = []
+    if message.role == "human":
+        ai_content = modules.generate_ai_response(
+            content=message.content, model=interaction.settings.model_name
+        )
+        ai_message = schemas.MessageCreate(role="ai", content=ai_content)
+
+        messages.append(message)
+        messages.append(ai_message)
+
+    return [
+        schemas.Message.model_validate(message)
+        for message in crud.create_message(
+            db=db, messages=messages, interaction_id=interaction_id
+        )
+    ]
