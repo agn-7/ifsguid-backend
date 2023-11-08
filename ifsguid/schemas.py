@@ -20,8 +20,13 @@ class Message(MessageCreate):
         from_attributes = True
 
 
+class Settings(BaseModel):
+    model_name: str = "GPT4"
+    role: str = "System"
+    prompt: str
+
 class InteractionCreate(BaseModel):
-    settings: dict
+    settings: Settings
 
     class config:
         from_attributes = True
