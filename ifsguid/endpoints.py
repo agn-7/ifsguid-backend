@@ -82,6 +82,13 @@ async def get_all_message_in_interaction(
     per_page: Optional[int] = None,
     db: Session = Depends(get_db),
 ) -> List[schemas.Message]:
+    interaction = crud.get_interaction(db=db, id=interaction_id)
+
+    if not interaction:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Interaction not found"
+        )
+
     return [
         schemas.Message.model_validate(message)
         for message in crud.get_messages(
@@ -96,14 +103,14 @@ async def get_all_message_in_interaction(
 async def create_message(
     interaction_id: UUID, message: schemas.MessageCreate, db: Session = Depends(get_db)
 ) -> schemas.Message:
-    interaction = schemas.Interaction.model_validate(
-        crud.get_interaction(db=db, id=interaction_id)
-    )
+    interaction = crud.get_interaction(db=db, id=interaction_id)
 
     if not interaction:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Interaction not found"
         )
+
+    interaction = schemas.Interaction.model_validate(interaction)
 
     messages = []
     if message.role == "human":
