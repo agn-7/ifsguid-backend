@@ -35,7 +35,7 @@ class Base(object):
         primary_key=True,
         default=uuid.uuid4,
         unique=True,
-        nullable=False
+        nullable=False,
     )
 
 

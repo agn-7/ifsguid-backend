@@ -25,6 +25,7 @@ class Settings(BaseModel):
     role: str = "System"
     prompt: str
 
+
 class InteractionCreate(BaseModel):
     settings: Settings
 

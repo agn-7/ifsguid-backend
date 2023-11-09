@@ -8,8 +8,8 @@ from . import models, schemas, utils
 
 
 def get_interactions(
-        db: Session, page: int = None, per_page: int = 10
-    ) -> List[models.Interaction]:
+    db: Session, page: int = None, per_page: int = 10
+) -> List[models.Interaction]:
     query = db.query(models.Interaction)
 
     if page is not None:
@@ -25,7 +25,9 @@ def get_interaction(db: Session, id: UUID) -> models.Interaction:
 def create_interaction(db: Session, settings: schemas.Settings) -> models.Interaction:
     timestamp = utils.convert_timezone(datetime.now())
     interaction = models.Interaction(
-        settings=settings.model_dump(), created_at=timestamp, updated_at=timestamp,
+        settings=settings.model_dump(),
+        created_at=timestamp,
+        updated_at=timestamp,
     )
     db.add(interaction)
     db.commit()
@@ -33,9 +35,9 @@ def create_interaction(db: Session, settings: schemas.Settings) -> models.Intera
 
 
 def delete_interaction(db: Session, id: UUID) -> None:
-    interaction = db.query(
-        models.Interaction
-    ).filter(models.Interaction.id == id).first()
+    interaction = (
+        db.query(models.Interaction).filter(models.Interaction.id == id).first()
+    )
 
     if interaction is not None:
         db.delete(interaction)
@@ -46,11 +48,11 @@ def delete_interaction(db: Session, id: UUID) -> None:
 
 
 def update_interaction(
-        db: Session, id: UUID, settings: schemas.Settings
-    ) -> models.Interaction:
-    interaction: models.Interaction = db.query(
-        models.Interaction
-    ).filter(models.Interaction.id == id).first()
+    db: Session, id: UUID, settings: schemas.Settings
+) -> models.Interaction:
+    interaction: models.Interaction = (
+        db.query(models.Interaction).filter(models.Interaction.id == id).first()
+    )
 
     if interaction is not None:
         interaction.settings = settings
@@ -76,9 +78,8 @@ def get_messages(
 
 
 def create_message(
-        db: Session, messages: List[schemas.MessageCreate], interaction_id: UUID
-    ) -> List[models.Message]:
-
+    db: Session, messages: List[schemas.MessageCreate], interaction_id: UUID
+) -> List[models.Message]:
     messages_db = []
     for msg in messages:
         message = models.Message(
