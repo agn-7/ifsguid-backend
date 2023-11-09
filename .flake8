@@ -1,0 +1,20 @@
+[flake8]
+max-line-length = 120
+output-file = flake8.txt
+max-complexity = 10
+tee = True
+exclude =
+    .git
+    .tox
+    .venv
+    env
+    .cache
+    .eggs
+    .idea
+    .pytest*
+    *.egg-info
+    examples
+    doc
+extend-ignore=
+    # See https://github.com/PyCQA/pycodestyle/issues/373
+    E231,
