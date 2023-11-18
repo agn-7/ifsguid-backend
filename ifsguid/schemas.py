@@ -1,43 +1,39 @@
 from datetime import datetime
 from uuid import UUID
-from pydantic import BaseModel
-from typing import List
+from pydantic import BaseModel, ConfigDict
+from typing import List, Literal
 
 
 class MessageCreate(BaseModel):
-    role: str = "human"
-    content: str
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+    role: Literal["human", "ai"] = "human"
+    content: str
 
 
 class Message(MessageCreate):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 
 class Settings(BaseModel):
-    model_name: str = "GPT4"
-    role: str = "System"
+    model_name: Literal["GPT4", "GPT3"] = "GPT3"
+    role: Literal["System"] = "System"
     prompt: str
 
 
 class InteractionCreate(BaseModel):
-    settings: Settings
+    model_config = ConfigDict(from_attributes=True)
 
-    class config:
-        from_attributes = True
+    settings: Settings
 
 
 class Interaction(InteractionCreate):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     created_at: datetime
     updated_at: datetime
     messages: List[Message] = []
-
-    class Config:
-        from_attributes = True
