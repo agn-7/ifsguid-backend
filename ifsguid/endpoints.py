@@ -82,7 +82,7 @@ async def get_all_message_in_interaction(
     per_page: Optional[int] = None,
     db: Session = Depends(get_db),
 ) -> List[schemas.Message]:
-    interaction = crud.get_interaction(db=db, id=interaction_id)
+    interaction = crud.get_interaction(db=db, id=str(interaction_id))
 
     if not interaction:
         raise HTTPException(
@@ -92,7 +92,7 @@ async def get_all_message_in_interaction(
     return [
         schemas.Message.model_validate(message)
         for message in crud.get_messages(
-            db=db, interaction_id=interaction_id, page=page, per_page=per_page
+            db=db, interaction_id=str(interaction_id), page=page, per_page=per_page
         )
     ]
 
@@ -103,7 +103,7 @@ async def get_all_message_in_interaction(
 async def create_message(
     interaction_id: UUID, message: schemas.MessageCreate, db: Session = Depends(get_db)
 ) -> schemas.Message:
-    interaction = crud.get_interaction(db=db, id=interaction_id)
+    interaction = crud.get_interaction(db=db, id=str(interaction_id))
 
     if not interaction:
         raise HTTPException(
@@ -125,6 +125,6 @@ async def create_message(
     return [
         schemas.Message.model_validate(message)
         for message in crud.create_message(
-            db=db, messages=messages, interaction_id=interaction_id
+            db=db, messages=messages, interaction_id=str(interaction_id)
         )
     ]
