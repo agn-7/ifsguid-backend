@@ -31,9 +31,9 @@ class Base(object):
         return str(cls.__name__.lower())
 
     id = Column(
-        UUID(as_uuid=True),
+        String(36),
         primary_key=True,
-        default=uuid.uuid4,
+        default=lambda: str(uuid.uuid4()),
         unique=True,
         nullable=False,
     )
@@ -51,6 +51,6 @@ class Message(Base):
     created_at = Column(DateTime, index=True)
     role = Column(String, index=True)
     content = Column(String)
-    interaction_id = Column(UUID(as_uuid=True), ForeignKey("interaction.id"))
+    interaction_id = Column(String, ForeignKey("interaction.id"))
 
     interaction = relationship("Interaction", back_populates="messages")
