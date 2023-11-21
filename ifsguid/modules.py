@@ -9,5 +9,5 @@ def generate_ai_response(
 ) -> str:  # TODO: use async version for future
     return g4f.ChatCompletion.create(
         model=g4f.models.gpt_4 if model == "GPT4" else g4f.models.gpt_35_turbo,
-        messages=[{"role": "user", "content": content}],
+        messages=[{"role": "human", "content": content}],
     )
