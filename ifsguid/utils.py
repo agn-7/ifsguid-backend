@@ -19,3 +19,14 @@ def convert_timezone(dt: datetime, tz: str = "Europe/Berlin") -> datetime:
         The converted datetime object
     """
     return dt.astimezone(pytz.timezone(tz))
+
+
+def datetime_now() -> datetime:
+    """Returns the current datetime object
+
+    Returns
+    -------
+    datetime.datetime
+        The current datetime object
+    """
+    return convert_timezone(datetime.now())
