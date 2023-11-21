@@ -4,6 +4,8 @@ from sqlalchemy import Column, DateTime, Integer, String, Boolean, ForeignKey, J
 from sqlalchemy.orm import as_declarative, declared_attr, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
+from . import utils
+
 
 @as_declarative()
 class Base(object):
@@ -40,15 +42,24 @@ class Base(object):
 
 
 class Interaction(Base):
-    created_at = Column(DateTime, index=True)
-    updated_at = Column(DateTime, index=True)
+    created_at = Column(
+        DateTime(timezone=True), index=True, default=utils.datetime_now()
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        index=True,
+        default=utils.datetime_now(),
+        onupdate=utils.datetime_now(),
+    )
     settings = Column(JSON)
 
     messages = relationship("Message", back_populates="interaction")
 
 
 class Message(Base):
-    created_at = Column(DateTime, index=True)
+    created_at = Column(
+        DateTime(timezone=True), index=True, default=utils.datetime_now()
+    )
     role = Column(String, index=True)
     content = Column(String)
     interaction_id = Column(String, ForeignKey("interaction.id"))

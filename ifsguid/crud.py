@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List
 from uuid import UUID
 
@@ -23,11 +22,8 @@ def get_interaction(db: Session, id: UUID) -> models.Interaction:
 
 
 def create_interaction(db: Session, settings: schemas.Settings) -> models.Interaction:
-    timestamp = utils.convert_timezone(datetime.now())
     interaction = models.Interaction(
         settings=settings.model_dump(),
-        created_at=timestamp,
-        updated_at=timestamp,
     )
     db.add(interaction)
     db.commit()
@@ -56,7 +52,6 @@ def update_interaction(
 
     if interaction is not None:
         interaction.settings = settings
-        interaction.updated_at = utils.convert_timezone(datetime.now())
         db.commit()
         return interaction
 
@@ -85,7 +80,6 @@ def create_message(
         message = models.Message(
             **msg.model_dump(),
             interaction_id=interaction_id,
-            created_at=utils.convert_timezone(datetime.now()),
         )
         db.add(message)
         messages_db.append(message)

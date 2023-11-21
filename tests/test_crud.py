@@ -1,22 +1,15 @@
-from datetime import datetime
-
-from ifsguid import crud, models, utils, schemas
+from ifsguid import crud, models, schemas
 
 
 ### Unit Tests ###
 
 
 def test_get_interactions(db):
-    timestamp = utils.convert_timezone(datetime.now())
     interaction1 = models.Interaction(
         settings=dict(model_name="model1", role="role1", prompt="prompt1"),
-        created_at=timestamp,
-        updated_at=timestamp,
     )
     interaction2 = models.Interaction(
         settings=dict(model_name="model2", role="role2", prompt="prompt2"),
-        created_at=timestamp,
-        updated_at=timestamp,
     )
     db.add(interaction1)
     db.add(interaction2)
@@ -29,11 +22,8 @@ def test_get_interactions(db):
 
 
 def test_get_interaction(db):
-    timestamp = utils.convert_timezone(datetime.now())
     interaction = models.Interaction(
         settings=dict(model_name="model", role="role", prompt="prompt"),
-        created_at=timestamp,
-        updated_at=timestamp,
     )
     db.add(interaction)
     db.commit()
