@@ -20,7 +20,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 # models.Base.metadata.create_all(bind=engine)
 
 
-def override_get_db():
+def override_get_db() -> TestingSessionLocal:
     try:
         models.Base.metadata.create_all(bind=engine)
         session = TestingSessionLocal()
