@@ -22,3 +22,17 @@ def test_get_all_interactions(db):
     assert response.status_code == 200
     assert len(response.json()) == 2
 
+
+def test_create_interaction():
+    response = client.post(
+        "/api/interactions",
+        json={
+            "prompt": "something",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["settings"] == {
+        "prompt": "something",
+        "model_name": "GPT3",
+        "role": "System",
+    }
