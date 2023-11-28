@@ -15,6 +15,7 @@ psycopg2-binary = "^2.9.9"
 pydantic-settings = "^2.0.3"
 pytz = "^2023.3.post1"
 g4f = "^0.1.8.1"
+asyncpg = "^0.29.0"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
