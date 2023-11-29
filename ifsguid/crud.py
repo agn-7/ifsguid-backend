@@ -26,12 +26,21 @@ async def get_interaction(db: AsyncSession, id: UUID) -> models.Interaction:
     return result.scalar()
 
 
-def create_interaction(db: Session, settings: schemas.Settings) -> models.Interaction:
+async def create_interaction(
+    db: AsyncSession, settings: schemas.Settings
+) -> models.Interaction:
     interaction = models.Interaction(
         settings=settings.model_dump(),
     )
     db.add(interaction)
-    db.commit()
+    await db.commit()
+    result = await db.scalars(
+        select(models.Interaction)
+        .options(selectinload(models.Interaction.messages))
+        .where(models.Interaction.id == interaction.id)
+    )
+    interaction = result.first()
+
     return interaction
 
 

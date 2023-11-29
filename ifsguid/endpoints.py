@@ -47,11 +47,11 @@ async def get_interactions(
 
 @router.post("/interactions", response_model=schemas.Interaction)
 async def create_interactions(
-    settings: schemas.Settings, db: Session = Depends(get_db)
+    settings: schemas.Settings, db: AsyncSession = Depends(get_db)
 ) -> schemas.Interaction:
-    return schemas.Interaction.model_validate(
-        crud.create_interaction(db=db, settings=settings)
-    )
+    interaction = await crud.create_interaction(db=db, settings=settings)
+
+    return schemas.Interaction.model_validate(interaction)
 
 
 @router.delete("/interactions", response_model=Dict[str, Any], include_in_schema=False)
