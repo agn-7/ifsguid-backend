@@ -33,6 +33,6 @@ def test_create_interaction():
     assert response.status_code == 200
     assert response.json()["settings"] == {
         "prompt": "something",
-        "model_name": "GPT3",
+        "model": "GPT3",
         "role": "System",
     }
