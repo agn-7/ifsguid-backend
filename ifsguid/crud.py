@@ -11,7 +11,7 @@ from . import models, schemas
 async def get_interactions(
     db: AsyncSession, page: int = None, per_page: int = 10
 ) -> List[models.Interaction]:
-    stmt = select(models.Interaction)
+    stmt = select(models.Interaction).options(joinedload(models.Interaction.messages))
 
     if page is not None:
         stmt = stmt.offset((page - 1) * per_page).limit(per_page)
