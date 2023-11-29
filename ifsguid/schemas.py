@@ -28,6 +28,7 @@ class Prompt(BaseModel):
     role: Literal["System"] = "System"
     prompt: str
 
+
 class Settings(ChatModel, Prompt):
     pass
 

@@ -39,7 +39,7 @@ async def create_interaction(
     return interaction
 
 
-def delete_interaction(db: Session, id: UUID) -> None:
+async def delete_interaction(db: AsyncSession, id: UUID) -> None:
     interaction = (
         db.query(models.Interaction).filter(models.Interaction.id == id).first()
     )
@@ -52,8 +52,8 @@ def delete_interaction(db: Session, id: UUID) -> None:
     return False
 
 
-def update_interaction(
-    db: Session, id: UUID, settings: schemas.Settings
+async def update_interaction(
+    db: AsyncSession, id: UUID, settings: schemas.Settings
 ) -> models.Interaction:
     interaction: models.Interaction = (
         db.query(models.Interaction).filter(models.Interaction.id == id).first()
@@ -67,8 +67,8 @@ def update_interaction(
     return None
 
 
-def get_messages(
-    db: Session, interaction_id: UUID = None, page: int = None, per_page: int = 10
+async def get_messages(
+    db: AsyncSession, interaction_id: UUID = None, page: int = None, per_page: int = 10
 ) -> List[models.Message]:
     query = db.query(models.Message)
 
@@ -81,8 +81,8 @@ def get_messages(
     return query.all()
 
 
-def create_message(
-    db: Session, messages: List[schemas.MessageCreate], interaction_id: UUID
+async def create_message(
+    db: AsyncSession, messages: List[schemas.MessageCreate], interaction_id: UUID
 ) -> List[models.Message]:
     messages_db = []
     for msg in messages:
@@ -93,5 +93,5 @@ def create_message(
         db.add(message)
         messages_db.append(message)
 
-    db.commit()
+    await db.commit()
     return messages_db
