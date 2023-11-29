@@ -46,8 +46,13 @@ async def get_interactions(
 
 @router.post("/interactions", response_model=schemas.Interaction)
 async def create_interactions(
-    settings: schemas.Settings, db: AsyncSession = Depends(get_db)
+    prompt: schemas.Prompt,
+    chat_model: schemas.ChatModel = Depends(),
+    db: AsyncSession = Depends(get_db)
 ) -> schemas.Interaction:
+    settings = schemas.Settings(
+        model=chat_model.model, prompt=prompt.prompt, role=prompt.role
+    )
     interaction = await crud.create_interaction(db=db, settings=settings)
 
     return schemas.Interaction.model_validate(interaction)
