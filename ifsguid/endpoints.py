@@ -15,7 +15,6 @@ async def get_db() -> AsyncSession:
         yield session
 
 
-
 @router.get("/", response_model=str)
 async def get_root(db: AsyncSession = Depends(get_db)) -> str:
     return "Hello from IFSGuid!"

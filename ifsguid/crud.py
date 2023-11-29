@@ -34,12 +34,7 @@ async def create_interaction(
     )
     db.add(interaction)
     await db.commit()
-    result = await db.execute(
-        select(models.Interaction)
-        .options(joinedload(models.Interaction.messages))
-        .where(models.Interaction.id == interaction.id)
-    )
-    interaction = result.scalars().unique().one()
+    await db.refresh(interaction)
 
     return interaction
 
