@@ -1,13 +1,19 @@
 import g4f
+import traceback
 
 g4f.debug.logging = True
 g4f.check_version = False
 
 
-def generate_ai_response(
-    content: str, model: str = "GPT4"
-) -> str:  # TODO: use async version for future
-    return g4f.ChatCompletion.create(
-        model=g4f.models.gpt_4 if model == "GPT4" else g4f.models.gpt_35_turbo,
-        messages=[{"role": "human", "content": content}],
-    )
+async def generate_ai_response(
+    content: str, model: g4f.Model = g4f.models.default
+) -> str:
+    try:
+        response = await g4f.ChatCompletion.create_async(
+            model=model,
+            messages=[{"role": "human", "content": content}],
+        )
+        return response
+    except Exception:
+        traceback.print_exc()
+        return "error!"
