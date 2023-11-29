@@ -1,7 +1,7 @@
 from typing import List
 from uuid import UUID
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from . import models, schemas, utils
 
@@ -9,7 +9,9 @@ from . import models, schemas, utils
 def get_interactions(
     db: Session, page: int = None, per_page: int = 10
 ) -> List[models.Interaction]:
-    query = db.query(models.Interaction)
+    query = db.query(models.Interaction).options(
+        joinedload(models.Interaction.messages)
+    )
 
     if page is not None:
         query = query.offset((page - 1) * per_page).limit(per_page)
