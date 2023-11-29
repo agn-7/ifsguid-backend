@@ -5,21 +5,19 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from . import crud, schemas, modules
-from .database import SessionLocal
+from .database import async_session, AsyncSession
 
 router = APIRouter()
 
 
-def get_db() -> SessionLocal:
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close()
+async def get_db() -> AsyncSession:
+    async with async_session() as session:
+        yield session
+
 
 
 @router.get("/", response_model=str)
-async def get_root(db: Session = Depends(get_db)) -> str:
+async def get_root(db: AsyncSession = Depends(get_db)) -> str:
     return "Hello from IFSGuid!"
 
 
@@ -27,11 +25,12 @@ async def get_root(db: Session = Depends(get_db)) -> str:
 async def get_all_interactions(
     page: Optional[int] = None,
     per_page: Optional[int] = None,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ) -> List[schemas.Interaction]:
+    interactions = await crud.get_interactions(db=db, page=page, per_page=per_page)
+
     return [
-        schemas.Interaction.model_validate(interaction)
-        for interaction in crud.get_interactions(db=db, page=page, per_page=per_page)
+        schemas.Interaction.model_validate(interaction) for interaction in interactions
     ]
 
 
@@ -39,7 +38,7 @@ async def get_all_interactions(
     "/interactions/{id}", response_model=schemas.Interaction, include_in_schema=False
 )
 async def get_interactions(
-    id: UUID, db: Session = Depends(get_db)
+    id: UUID, db: AsyncSession = Depends(get_db)
 ) -> schemas.Interaction:
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="NotImplementedError"

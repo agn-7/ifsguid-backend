@@ -1,24 +1,29 @@
 from typing import List
 from uuid import UUID
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, selectinload
+from sqlalchemy.future import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import models, schemas, utils
+from . import models, schemas
 
 
-def get_interactions(
-    db: Session, page: int = None, per_page: int = 10
+async def get_interactions(
+    db: AsyncSession, page: int = None, per_page: int = 10
 ) -> List[models.Interaction]:
-    query = db.query(models.Interaction)
+    stmt = select(models.Interaction)
 
     if page is not None:
-        query = query.offset((page - 1) * per_page).limit(per_page)
+        stmt = stmt.offset((page - 1) * per_page).limit(per_page)
 
-    return query.all()
+    result = await db.execute(stmt)
+    return result.scalars().unique().all()
 
 
-def get_interaction(db: Session, id: UUID) -> models.Interaction:
-    return db.query(models.Interaction).filter(models.Interaction.id == id).first()
+async def get_interaction(db: AsyncSession, id: UUID) -> models.Interaction:
+    stmt = select(models.Interaction).where(models.Interaction.id == id)
+    result = await db.execute(stmt)
+    return result.scalar()
 
 
 def create_interaction(db: Session, settings: schemas.Settings) -> models.Interaction:
