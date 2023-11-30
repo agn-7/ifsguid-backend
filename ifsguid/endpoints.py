@@ -85,19 +85,18 @@ async def get_all_message_in_interaction(
     per_page: Optional[int] = None,
     db: AsyncSession = Depends(get_db),
 ) -> List[schemas.Message]:
-    interaction = crud.get_interaction(db=db, id=str(interaction_id))
+    interaction = await crud.get_interaction(db=db, id=str(interaction_id))
 
     if not interaction:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Interaction not found"
         )
 
-    return [
-        schemas.Message.model_validate(message)
-        for message in crud.get_messages(
-            db=db, interaction_id=str(interaction_id), page=page, per_page=per_page
-        )
-    ]
+    messages = await crud.get_messages(
+        db=db, interaction_id=str(interaction_id), page=page, per_page=per_page
+    )
+
+    return [schemas.Message.model_validate(message) for message in messages]
 
 
 @router.post(

@@ -1,7 +1,8 @@
 from typing import List
 from uuid import UUID
 
-from sqlalchemy.orm import Session, joinedload, selectinload
+from sqlalchemy import delete, update
+from sqlalchemy.orm import joinedload
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -40,13 +41,11 @@ async def create_interaction(
 
 
 async def delete_interaction(db: AsyncSession, id: UUID) -> None:
-    interaction = (
-        db.query(models.Interaction).filter(models.Interaction.id == id).first()
-    )
+    stmt = delete(models.Interaction).where(models.Interaction.id == id)
+    result = await db.execute(stmt)
 
-    if interaction is not None:
-        db.delete(interaction)
-        db.commit()
+    if result.rowcount:
+        await db.commit()
         return True
 
     return False
@@ -55,14 +54,16 @@ async def delete_interaction(db: AsyncSession, id: UUID) -> None:
 async def update_interaction(
     db: AsyncSession, id: UUID, settings: schemas.Settings
 ) -> models.Interaction:
-    interaction: models.Interaction = (
-        db.query(models.Interaction).filter(models.Interaction.id == id).first()
+    stmt = (
+        update(models.Interaction)
+        .where(models.Interaction.id == id)
+        .values(settings=settings)
     )
+    result = await db.execute(stmt)
 
-    if interaction is not None:
-        interaction.settings = settings
-        db.commit()
-        return interaction
+    if result.rowcount:
+        await db.commit()
+        return True
 
     return None
 
@@ -70,15 +71,16 @@ async def update_interaction(
 async def get_messages(
     db: AsyncSession, interaction_id: UUID = None, page: int = None, per_page: int = 10
 ) -> List[models.Message]:
-    query = db.query(models.Message)
+    stmt = select(models.Message)
 
     if interaction_id is not None:
-        query = query.filter(models.Message.interaction_id == interaction_id)
+        stmt = stmt.where(models.Message.interaction_id == interaction_id)
 
     if page is not None:
-        query = query.offset((page - 1) * per_page).limit(per_page)
+        stmt = stmt.offset((page - 1) * per_page).limit(per_page)
 
-    return query.all()
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
 async def create_message(
