@@ -134,6 +134,21 @@ files = [
 frozenlist = ">=1.1.0"
 
 [[package]]
+name = "aiosqlite"
+version = "0.19.0"
+description = "asyncio bridge to the standard sqlite3 module"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "aiosqlite-0.19.0-py3-none-any.whl", hash = "sha256:edba222e03453e094a3ce605db1b970c4b3376264e56f32e2a4959f948d66a96"},
+    {file = "aiosqlite-0.19.0.tar.gz", hash = "sha256:95ee77b91c8d2808bd08a59fbebf66270e9090c3d92ffbf260dc0db0b979577d"},
+]
+
+[package.extras]
+dev = ["aiounittest (==1.4.1)", "attribution (==1.6.2)", "black (==23.3.0)", "coverage[toml] (==7.2.3)", "flake8 (==5.0.4)", "flake8-bugbear (==23.3.12)", "flit (==3.7.1)", "mypy (==1.2.0)", "ufmt (==2.1.0)", "usort (==1.0.6)"]
+docs = ["sphinx (==6.1.3)", "sphinx-mdinclude (==0.5.3)"]
+
+[[package]]
 name = "alembic"
 version = "1.12.1"
 description = "A database migration tool for SQLAlchemy."
@@ -2074,6 +2089,24 @@ pluggy = ">=0.12,<2.0"
 testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-asyncio"
+version = "0.21.1"
+description = "Pytest support for asyncio"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pytest-asyncio-0.21.1.tar.gz", hash = "sha256:40a7eae6dded22c7b604986855ea48400ab15b069ae38116e8c01238e9eeb64d"},
+    {file = "pytest_asyncio-0.21.1-py3-none-any.whl", hash = "sha256:8666c1c8ac02631d7c51ba282e0c69a8a452b211ffedf2599099845da5c5c37b"},
+]
+
+[package.dependencies]
+pytest = ">=7.0.0"
+
+[package.extras]
+docs = ["sphinx (>=5.3)", "sphinx-rtd-theme (>=1.0)"]
+testing = ["coverage (>=6.2)", "flaky (>=3.5.0)", "hypothesis (>=5.7.1)", "mypy (>=0.931)", "pytest-trio (>=0.7.0)"]
+
+[[package]]
 name = "pytest-cov"
 version = "4.1.0"
 description = "Pytest plugin for measuring coverage."
@@ -2689,4 +2722,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "2cc7cafc6637a43ce418bb8971e5b09134f4750d03e4c830b15f26625d1ea28d"
+content-hash = "60b8ce6c40d2b0d4d9c6d306b5ad17ca4cf02951f0a8941808b4603832946991"
