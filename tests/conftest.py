@@ -1,9 +1,11 @@
 import pytest
 
-from .client import override_get_db, engine
+from . import client
 
 
 @pytest.fixture
 async def db():
-    async for session in override_get_db():
+    async with client.async_session() as session:
+        await client.create_tables()
         yield session
+        await client.drop_tables()

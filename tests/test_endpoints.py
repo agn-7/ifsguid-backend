@@ -15,20 +15,15 @@ def test_get_root():
 
 @pytest.mark.asyncio
 async def test_get_all_interactions(db):
-    async with client.async_session() as db:
-        try:
-            await client.create_tables()
-            interaction1 = models.Interaction(settings={"prompt": "something"})
-            interaction2 = models.Interaction(settings={"prompt": "something else"})
-            db.add(interaction1)
-            db.add(interaction2)
-            await db.commit()
+    interaction1 = models.Interaction(settings={"prompt": "something"})
+    interaction2 = models.Interaction(settings={"prompt": "something else"})
+    db.add(interaction1)
+    db.add(interaction2)
+    yield db.commit()  # TODO
 
-            response = client.client.get("/api/interactions")
-            assert response.status_code == 200
-            assert len(response.json()) == 2
-        finally:
-            await client.drop_tables()
+    response = client.client.get("/api/interactions")
+    assert response.status_code == 200
+    assert len(response.json()) == 2
 
 
 @pytest.mark.asyncio
