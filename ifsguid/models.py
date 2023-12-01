@@ -53,7 +53,7 @@ class Interaction(Base):
     )
     settings = Column(JSON)
 
-    messages = relationship("Message", back_populates="interaction")
+    messages = relationship("Message", back_populates="interaction", lazy="selectin")
 
 
 class Message(Base):

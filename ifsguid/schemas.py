@@ -3,6 +3,8 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 from typing import List, Literal
 
+from g4f import _all_models
+
 
 class MessageCreate(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -18,10 +20,17 @@ class Message(MessageCreate):
     created_at: datetime
 
 
-class Settings(BaseModel):
-    model_name: Literal["GPT4", "GPT3"] = "GPT3"
+class ChatModel(BaseModel):
+    model: Literal[tuple(_all_models)] = "gpt-3.5-turbo"
+
+
+class Prompt(BaseModel):
     role: Literal["System"] = "System"
     prompt: str
+
+
+class Settings(ChatModel, Prompt):
+    pass
 
 
 class InteractionCreate(BaseModel):

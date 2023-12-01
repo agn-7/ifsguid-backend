@@ -22,7 +22,5 @@ To launch an API instance, you should:
 You can also run the project via `docker-compose` (i.e. `docker compose up -d`) on port `80` in which you would need the [.docker.env](/.docker.env) containing the following variable to create the database:
 
 ```
-SQLALCHEMY_DATABASE_URI=postgresql://<username>:<password>@ifsguid_db/<db-name>
+SQLALCHEMY_DATABASE_URI=postgresql+asyncpg://<username>:<password>@ifsguid_db/<db-name>
 ```
-
-

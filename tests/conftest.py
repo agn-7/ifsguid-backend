@@ -1,12 +1,13 @@
-import pytest
+import pytest_asyncio
 
-from ifsguid import models
-from .client import override_get_db, engine
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from . import client
 
 
-@pytest.fixture
-def db():
-    try:
-        yield from override_get_db()
-    finally:
-        models.Base.metadata.drop_all(bind=engine)
+@pytest_asyncio.fixture()
+async def db() -> AsyncSession:
+    async with client.async_session() as session:
+        await client.create_tables()
+        yield session
+        await client.drop_tables()

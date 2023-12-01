@@ -1,79 +1,90 @@
 from typing import List
 from uuid import UUID
 
-from sqlalchemy.orm import Session
+from sqlalchemy import delete, update
+from sqlalchemy.orm import joinedload
+from sqlalchemy.future import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import models, schemas, utils
+from . import models, schemas
 
 
-def get_interactions(
-    db: Session, page: int = None, per_page: int = 10
+async def get_interactions(
+    db: AsyncSession, page: int = None, per_page: int = 10
 ) -> List[models.Interaction]:
-    query = db.query(models.Interaction)
+    stmt = select(models.Interaction).options(joinedload(models.Interaction.messages))
 
     if page is not None:
-        query = query.offset((page - 1) * per_page).limit(per_page)
+        stmt = stmt.offset((page - 1) * per_page).limit(per_page)
 
-    return query.all()
-
-
-def get_interaction(db: Session, id: UUID) -> models.Interaction:
-    return db.query(models.Interaction).filter(models.Interaction.id == id).first()
+    result = await db.execute(stmt)
+    return result.scalars().unique().all()
 
 
-def create_interaction(db: Session, settings: schemas.Settings) -> models.Interaction:
+async def get_interaction(db: AsyncSession, id: UUID) -> models.Interaction:
+    stmt = select(models.Interaction).where(models.Interaction.id == id)
+    result = await db.execute(stmt)
+    return result.scalar()
+
+
+async def create_interaction(
+    db: AsyncSession, settings: schemas.Settings
+) -> models.Interaction:
     interaction = models.Interaction(
         settings=settings.model_dump(),
     )
     db.add(interaction)
-    db.commit()
+    await db.commit()
+    await db.refresh(interaction)
+
     return interaction
 
 
-def delete_interaction(db: Session, id: UUID) -> None:
-    interaction = (
-        db.query(models.Interaction).filter(models.Interaction.id == id).first()
-    )
+async def delete_interaction(db: AsyncSession, id: UUID) -> None:
+    stmt = delete(models.Interaction).where(models.Interaction.id == id)
+    result = await db.execute(stmt)
 
-    if interaction is not None:
-        db.delete(interaction)
-        db.commit()
+    if result.rowcount:
+        await db.commit()
         return True
 
     return False
 
 
-def update_interaction(
-    db: Session, id: UUID, settings: schemas.Settings
+async def update_interaction(
+    db: AsyncSession, id: UUID, settings: schemas.Settings
 ) -> models.Interaction:
-    interaction: models.Interaction = (
-        db.query(models.Interaction).filter(models.Interaction.id == id).first()
+    stmt = (
+        update(models.Interaction)
+        .where(models.Interaction.id == id)
+        .values(settings=settings)
     )
+    result = await db.execute(stmt)
 
-    if interaction is not None:
-        interaction.settings = settings
-        db.commit()
-        return interaction
+    if result.rowcount:
+        await db.commit()
+        return True
 
     return None
 
 
-def get_messages(
-    db: Session, interaction_id: UUID = None, page: int = None, per_page: int = 10
+async def get_messages(
+    db: AsyncSession, interaction_id: UUID = None, page: int = None, per_page: int = 10
 ) -> List[models.Message]:
-    query = db.query(models.Message)
+    stmt = select(models.Message)
 
     if interaction_id is not None:
-        query = query.filter(models.Message.interaction_id == interaction_id)
+        stmt = stmt.where(models.Message.interaction_id == interaction_id)
 
     if page is not None:
-        query = query.offset((page - 1) * per_page).limit(per_page)
+        stmt = stmt.offset((page - 1) * per_page).limit(per_page)
 
-    return query.all()
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
-def create_message(
-    db: Session, messages: List[schemas.MessageCreate], interaction_id: UUID
+async def create_message(
+    db: AsyncSession, messages: List[schemas.MessageCreate], interaction_id: UUID
 ) -> List[models.Message]:
     messages_db = []
     for msg in messages:
@@ -84,5 +95,5 @@ def create_message(
         db.add(message)
         messages_db.append(message)
 
-    db.commit()
+    await db.commit()
     return messages_db

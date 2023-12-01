@@ -36,12 +36,12 @@ jobs:
         run: |
           poetry run pytest -s
         env:
-          SQLALCHEMY_DATABASE_URI: postgresql://ifsguid_usr:root@localhost/ifsguid_db
+          SQLALCHEMY_DATABASE_URI: postgresql+asyncpg://ifsguid_usr:root@localhost/ifsguid_db
       - name:  Code Coverage
         run: |
           poetry run pytest --cov=./ifsguid --cov-report=xml --cov-report=term-missing
         env:
-          SQLALCHEMY_DATABASE_URI: postgresql://ifsguid_usr:root@localhost/ifsguid_db
+          SQLALCHEMY_DATABASE_URI: postgresql+asyncpg://ifsguid_usr:root@localhost/ifsguid_db
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         env:
