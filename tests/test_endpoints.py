@@ -19,7 +19,7 @@ async def test_get_all_interactions(db):
     interaction2 = models.Interaction(settings={"prompt": "something else"})
     db.add(interaction1)
     db.add(interaction2)
-    yield db.commit()  # TODO
+    await db.commit()
 
     response = client.client.get("/api/interactions")
     assert response.status_code == 200
@@ -27,21 +27,16 @@ async def test_get_all_interactions(db):
 
 
 @pytest.mark.asyncio
-async def test_create_interaction():
-    async with client.async_session() as db:
-        try:
-            await client.create_tables()
-            response = client.client.post(
-                "/api/interactions",
-                json={
-                    "prompt": "something",
-                },
-            )
-            assert response.status_code == 200
-            assert response.json()["settings"] == {
-                "prompt": "something",
-                "model": "gpt-3.5-turbo",
-                "role": "System",
-            }
-        finally:
-            await client.drop_tables()
+async def test_create_interaction(db):
+    response = client.client.post(
+        "/api/interactions",
+        json={
+            "prompt": "something",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["settings"] == {
+        "prompt": "something",
+        "model": "gpt-3.5-turbo",
+        "role": "System",
+    }
