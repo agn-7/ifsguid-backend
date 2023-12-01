@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/agn-7/ifsguid-backend/graph/badge.svg?token=RGwuSevG8u)](https://codecov.io/gh/agn-7/ifsguid-backend)
 
 # IFSGuid Backend
-Simple AI Chat Application Powered by gpt4free on top of FastAPI
+Async AI Chat Application Powered by gpt4free on top of FastAPI
 
 ## Setup
 It contains two generic entity models Interaction and Message.
