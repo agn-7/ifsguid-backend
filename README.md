@@ -24,3 +24,22 @@ You can also run the project via `docker-compose` (i.e. `docker compose up -d`) 
 ```
 SQLALCHEMY_DATABASE_URI=postgresql+asyncpg://<username>:<password>@ifsguid_db/<db-name>
 ```
+
+
+---
+Here is a benchmark of the API using by [wrk](https://github.com/wg/wrk) to demonstrate the performance of the service in different configuration:
+
+| Service      | Loading Strategy | WRK Configuration   | Throughput (reqs/sec) |
+|--------------|------------------|---------------------|-----------------------|
+| Async        | Joined           | 4 threads, 10 conns | 132                   |
+| Async        | Selectin         | 4 threads, 10 conns | 112                   |
+| Sync         | Lazy             | 4 threads, 10 conns | 36                    |
+| Sync         | Joined           | 4 threads, 10 conns | 132                   |
+| Sync         | Selectin         | 4 threads, 10 conns | 114                   |
+| Async        | Joined           | 4 threads, 50 conns | 159                   |
+| Sync         | Joined           | 4 threads, 50 conns | 1                     |
+| Async        | Joined           | 4 threads, 15 conns | **126**               |
+| Sync         | Joined           | 4 threads, 15 conns | **69**                |
+
+
+![benchmark](https://github.com/agn-7/ifsguid-backend/assets/14202344/74c36824-0a11-424c-8622-f7e633a33d14)
