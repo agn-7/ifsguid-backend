@@ -38,8 +38,8 @@ Here is a benchmark of the API using by [wrk](https://github.com/wg/wrk) to demo
 | Sync         | Selectin         | 4 threads, 10 conns | 114                   |
 | Async        | Joined           | 4 threads, 50 conns | 159                   |
 | Sync         | Joined           | 4 threads, 50 conns | 1                     |
-| Async        | Joined           | 4 threads, 15 conns | **126**               |
-| Sync         | Joined           | 4 threads, 15 conns | **69**                |
+| **Async**    | **Joined**       | 4 threads, 15 conns | **126**               |
+| **Sync**     | **Joined**       | 4 threads, 15 conns | **69**                |
 
 
-![benchmark](https://github.com/agn-7/ifsguid-backend/assets/14202344/74c36824-0a11-424c-8622-f7e633a33d14)
+![benchmark](https://github.com/agn-7/ifsguid-backend/assets/14202344/d435b604-f492-4fc0-b6a0-26ca3284d448)
