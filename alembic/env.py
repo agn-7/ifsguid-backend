@@ -40,7 +40,7 @@ def run_migrations_offline() -> None:
     """
 
     context.configure(
-        url=settings.SQLALCHEMY_DATABASE_URI.unicode_string(),
+        url=f"{settings.SQLALCHEMY_DATABASE_URI}",
         target_metadata=target_metadata,
         literal_binds=True,
         compare_types=True,
@@ -59,9 +59,9 @@ def run_migrations_online() -> None:
 
     """
     configuration = config.get_section(config.config_ini_section)
-    configuration[
-        "sqlalchemy.url"
-    ] = settings.SQLALCHEMY_DATABASE_URI.unicode_string().replace("+asyncpg", "")
+    configuration["sqlalchemy.url"] = f"{settings.SQLALCHEMY_DATABASE_URI}".replace(
+        "+asyncpg", ""
+    )
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
