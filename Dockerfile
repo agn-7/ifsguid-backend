@@ -19,4 +19,4 @@ COPY pyproject.toml /app
 COPY . /app
 RUN poetry install
 
-CMD ["./start_app.sh"]
+CMD ["./start_app_production.sh"]
