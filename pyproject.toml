@@ -14,7 +14,7 @@ sqlalchemy = "1.4.27"
 psycopg2-binary = "^2.9.9"
 pydantic-settings = "^2.1.0"
 pytz = "^2023.3.post1"
-g4f = "0.1.9.3"
+g4f = "0.1.9.6"
 asyncpg = "^0.29.0"
 gunicorn = "^21.2.0"
 

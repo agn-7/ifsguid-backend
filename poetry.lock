@@ -973,13 +973,13 @@ files = [
 
 [[package]]
 name = "g4f"
-version = "0.1.9.3"
+version = "0.1.9.6"
 description = "The official gpt4free repository | various collection of powerful language models"
 optional = false
 python-versions = "*"
 files = [
-    {file = "g4f-0.1.9.3-py3-none-any.whl", hash = "sha256:0b0386dfcff50c49807ddf2185f9878aaebf6d46fc5344701609525aa9074078"},
-    {file = "g4f-0.1.9.3.tar.gz", hash = "sha256:d073f8172def17c6017f7f184146785ffd8e4ec937560fcffa1424d17f440fc2"},
+    {file = "g4f-0.1.9.6-py3-none-any.whl", hash = "sha256:40cbb3f5ca5d09fcc8329b17c07aa9da194e6eaf34a77d50f55adf368bf94d1c"},
+    {file = "g4f-0.1.9.6.tar.gz", hash = "sha256:7eff89c8359d1d48cf0afa6bc9ded9dd5064979bffbb10499383a6ad8ab670ae"},
 ]
 
 [package.dependencies]
@@ -990,7 +990,7 @@ asyncstdlib = "*"
 browser-cookie3 = "*"
 bs4 = "*"
 certifi = "*"
-curl-cffi = ">=0.5.10b4"
+curl-cffi = ">=0.5.10"
 duckduckgo-search = "*"
 fastapi = "*"
 flask = "*"
@@ -2882,4 +2882,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "d4c70a76b10268803d5c4c228611b1b9f8d95ad11da85f77ad9d8c2d07f672f9"
+content-hash = "7c6f50b32d5f5af28dd54164d211eec22dfdb694cb4baa5f93689a3c449e28d8"
