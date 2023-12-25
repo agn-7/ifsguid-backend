@@ -2,7 +2,6 @@ from typing import List, Dict, Any, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from g4f import ModelUtils
 
 from . import crud, schemas, modules
 from .database import async_session, AsyncSession
@@ -120,7 +119,7 @@ async def create_message(
     if message.role == "human":
         ai_content = await modules.generate_ai_response(
             content=message.content,
-            model=ModelUtils.convert[interaction.settings.model],
+            interaction=interaction,
         )
         ai_message = schemas.MessageCreate(role="ai", content=ai_content)
 

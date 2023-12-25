@@ -38,5 +38,5 @@ async def test_create_interaction(db):
     assert response.json()["settings"] == {
         "prompt": "something",
         "model": "gpt-3.5-turbo",
-        "role": "System",
+        "role": "system",
     }
