@@ -99,7 +99,7 @@ async def get_all_message_in_interaction(
 
 
 @router.post(
-    "/interactions/{interactions_id}/messages", response_model=List[schemas.Message]
+    "/interactions/{interaction_id}/messages", response_model=List[schemas.Message]
 )
 async def create_message(
     interaction_id: UUID,
