@@ -7,7 +7,7 @@ authors = ["Benyamin <benyaminjmf@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.5.2"
-fastapi = "^0.104.1"
+fastapi = "^0.109.2"
 uvicorn = "^0.24.0.post1"
 alembic = "^1.12.1"
 sqlalchemy = "1.4.27"
