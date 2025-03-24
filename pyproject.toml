@@ -16,7 +16,7 @@ pydantic-settings = "^2.1.0"
 pytz = "^2023.3.post1"
 g4f = "0.1.9.6"
 asyncpg = "^0.29.0"
-gunicorn = "^21.2.0"
+gunicorn = "^23.0.0"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
